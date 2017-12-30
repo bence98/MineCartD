@@ -1,0 +1,63 @@
+#!/bin/sh
+
+if [ $(id -u) != 0 ]; then
+    echo "You must run this script as root!" >&2
+    exit 1
+fi
+
+# Add user and working directory
+useradd -U -r -d /var/lib/minecartd -m minecartd
+
+# Download JAR
+wget -O /usr/lib/minecartd.jar http://csokicraft.agyklub.hu/downloads?file=minecartd_1.0.jar
+
+# Add runscript
+cat > /usr/bin/minecartd <<'EOF'
+#!/bin/sh
+java -jar /usr/lib/minecartd.jar "$@"
+EOF
+chmod 655 /usr/bin/minecartd
+
+# Create config (using newly created runscript) while we're root
+/usr/bin/minecartd -C
+
+# Add systemd service entry
+cat > /etc/systemd/system/minecartd.service <<EOF
+[Unit]
+Description=MineCartD - A Linux daemon for managing Minecraft servers
+After=network.target
+
+[Service]
+Type=simple
+User=minecartd
+WorkingDirectory=/var/lib/minecartd
+ExecStart=/usr/bin/minecartd
+ExecStop=/usr/bin/minecartd -S
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start service
+systemctl enable minecartd
+systemctl start minecartd
+
+cat > /usr/bin/minecartd_uninstall <<EOF
+#!/bin/sh
+systemctl stop minecartd
+systemctl disable minecartd
+
+rm /etc/systemd/system/minecartd.service
+rm /etc/minecartd.conf
+rm /usr/lib/minecartd.jar
+rm /usr/bin/minecartd
+rm /usr/bin/minecartd_uninstall
+
+userdel minecartd
+
+echo "MineCartD was successfully uninstalled!"
+EOF
+chmod 655 /usr/bin/minecartd_uninstall
+
+echo "MineCartD is now installed on your computer!"

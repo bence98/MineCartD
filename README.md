@@ -1,9 +1,15 @@
 # MineCartD
-A Linux daemon for managing Minecraft servers
+A Linux daemon for managing Minecraft servers  
+by CsokiCraft
+
+
+## Installation
+Run the `minecartd_install` script. It downloads and installs `minecartd`, sets up a new user account, generates default config file and servers directory, and installs and enables a `systemd` service for `minecartd`.  
+In general, using the service is the preferred method. However, on systems without `systemd`, or when testing the software, you may opt to disable it (`systemctl stop minecartd && systemctl disable minecartd`) and use the command line instead (`/usr/bin/minecartd` or `java -jar minecartd.jar`).
 
 
 ## Usage
-On the server, run `minecartd`.
+On the server, run `minecartd`, either from command line or via `systemd` service.
 Then on the client, connect to it with an appropriate tool (ex. `telnet`) to access the Command Interface
 
 
@@ -18,7 +24,7 @@ The config file consists of `key=value` pairs. Lines starting with `#` won't be 
 ### Command-line parameters
 * `--cfgfile|-f <file>`: use this config file instead of `/etc/minecartd.conf`
 * `--gen-cfg|-C`: generate config and quit. Won't launch Command Interface. Can't be used with `-S`
-* `--stop|-S`: connect to a server on localhost and send STOP to it (stops all Minecraft servers and the `minecartd` host). Can't be used with `-C`
+* `--stop|-S`: connect to a server on `localhost` and send `STOP` to it (stops all Minecraft servers and the `minecartd` host). Can't be used with `-C`
 
 
 ## Using the Command Interface on the client
