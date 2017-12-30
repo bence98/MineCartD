@@ -7,6 +7,7 @@ public class MineManagerWorker extends Thread{
 	protected MineManagerHost host;
 
 	public MineManagerWorker(MineManagerHost inst){
+		setDaemon(true);
 		host=inst;
 	}
 

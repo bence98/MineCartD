@@ -1,6 +1,7 @@
 package csokicraft.minecartd;
 
 import java.io.*;
+import java.net.Socket;
 
 import csokicraft.minecartd.manager.MineManagerHost;
 
@@ -13,13 +14,15 @@ public class MineCartD{
 		}
 		
 		System.out.println("Loading MineCartD v1.0, by CsokiCraft");
-		boolean discover=true;
+		boolean discover=true, stop=false;
 		String cfg=null;
 		for(int i=0;i<args.length;i++){
 			if("--gen-cfg".equals(args[i])||"-C".equals(args[i]))
 				discover=false;
 			if("--cfgfile".equals(args[i])||"-f".equals(args[i]))
 				cfg=args[++i];
+			if("--stop".equals(args[i])||"-S".equals(args[i]))
+				stop=true;
 		}
 		
 		MineConfigHandler cfgMan;
@@ -28,9 +31,16 @@ public class MineCartD{
 		else
 			cfgMan=new MineConfigHandler(new File(cfg));
 		
-		if(discover){
+		if(stop){
+			Socket sock=new Socket("localhost", cfgMan.port);
+			PrintWriter out=new PrintWriter(sock.getOutputStream());
+			out.println("STOP");
+			out.flush();
+			sock.close();
+		}else if(discover){
 			MineManagerHost host=new MineManagerHost(cfgMan);
-			while(host.isAlive());
+			while(host.isAlive())
+				Thread.yield();
 		}
 	}
 

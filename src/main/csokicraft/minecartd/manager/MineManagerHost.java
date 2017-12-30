@@ -53,39 +53,85 @@ public class MineManagerHost{
 				srv=srv.substring(0, pos2);
 			}
 		}
+		
+		System.out.println("Command: {"+cmd+"} {"+srv+"} {"+par+"}");
+		
 		if("help".equals(cmd)){
 			out.println("Available commands:");
 			out.println(" help");
 			out.println(" list");
+			out.println(" STOP");
 			out.println(" start <server>");
 			out.println(" kill <server>");
 			out.println(" cmd <server> <command>");
-//			out.println(" log <server> [maxlines]");
+			out.println(" log <server> [maxlines]");
 			return;
 		}
 		if("list".equals(cmd)){
 			out.println("Loaded servers:");
 			for(String name:servers.keySet()){
-				out.print(' ');out.println(name);
+				out.print(' ');out.print(name);out.print('\t');
+				if(servers.get(name).isAlive())
+					out.println("*Online*");
+				else
+					out.println("*Offline*");
 			}
 			out.println("To start a server, use the 'start <name>' command");
+			return;
+		}
+		if("STOP".equals(cmd)){
+			for(MineCraftServer server:servers.values()){
+				if(server.isAlive())
+					server.sendCmd("stop");
+			}
+			try{
+				Thread.sleep(1000);
+				waitForServersToStop();
+			}catch(InterruptedException ex){
+				ex.printStackTrace();
+			}
+			alive=false;
 			return;
 		}
 		MineCraftServer server=servers.get(srv);
 		if(server==null) out.println("No server named '"+srv+"'!");
 		else switch(cmd){
 		case "start":
-			server.startProc();
-			out.println("Started "+srv);
+			if(server.isAlive()){
+				out.println(srv+" is already running!");
+			}else{
+				server.startProc();
+				out.println("Started "+srv);
+			}
 			return;
 		case "kill":
-			server.killProc();
-			out.println("Killed "+srv);
+			if(server.isAlive()){
+				server.killProc();
+				out.println("Killed "+srv);
+			}else{
+				out.println(srv+" is offline!");
+			}
 			return;
 		case "cmd":
 			server.sendCmd(par);
 			out.println("Sent '"+par+"' to "+srv);
 			return;
+		case "log":
+			if(server.isAlive()){
+				byte ln=10;
+				if(par!=null) ln=Byte.parseByte(par);
+				server.printLog(out, ln);
+				out.println();
+			}else{
+				out.println(srv+" is offline!");
+			}
+		}
+	}
+
+	private void waitForServersToStop() throws InterruptedException{
+		for(MineCraftServer server:servers.values()){
+			if(server.isAlive())
+				server.waitForStop();
 		}
 	}
 
