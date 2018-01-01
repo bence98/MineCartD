@@ -3,6 +3,8 @@ package csokicraft.minecartd.manager;
 import java.io.*;
 import java.net.*;
 
+import csokicraft.minecartd.MineCartD;
+
 public class MineManagerWorker extends Thread{
 	protected MineManagerHost host;
 
@@ -20,7 +22,7 @@ public class MineManagerWorker extends Thread{
 			host.newWorker();
 			BufferedReader in=new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			PrintWriter out=new PrintWriter(sock.getOutputStream());
-			out.println("MineCartD v1.0 Command Interface. Type 'help' for a list of commands");
+			out.println(MineCartD.APP_NAME_VER+" Command Interface. Type 'help' for a list of commands");
 			out.flush();
 			String cmd=in.readLine();
 			while(cmd!=null){

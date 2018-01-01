@@ -27,6 +27,7 @@ public class MineManagerHost{
 	
 	public MineManagerHost(MineConfigHandler cfg) throws IOException{
 		this(cfg.discoverServers(), cfg.port);
+		cfg.onServerStart();
 	}
 	
 	public synchronized void newWorker() throws IOException{

@@ -10,10 +10,19 @@ public class MineConfigHandler{
 								DEFAULT_DIR="/var/lib/minecartd/servers";
 	public static final int DEFAULT_PORT=40960;
 	
+	/** Config file */
 	protected File cfgFile;
 	
+	/** Config entry: Servers' directory */
 	public File serversDir;
+	/** Config entry: The port of the server */
 	public int port;
+	
+	/** Temp file */
+	protected File tmpFile;
+	
+	/** Tempfile entry: last known port of the server. '-1' means unknown */
+	protected int lastPort=-1;
 	
 	public MineConfigHandler() throws IOException{
 		this(new File(DEFAULT_CFG));
@@ -25,7 +34,7 @@ public class MineConfigHandler{
 	}
 
 	private void genCfg() throws IOException{
-		System.out.println("Creating config at "+cfgFile.getAbsolutePath());
+		System.out.println("Creating config...");
 		PrintWriter fout=new PrintWriter(cfgFile);
 		fout.println("# This is the default config for MineCartD");
 		fout.println();
@@ -36,7 +45,7 @@ public class MineConfigHandler{
 	}
 
 	private void readCfg() throws IOException{
-		System.out.println("Reading config at "+cfgFile.getAbsolutePath());
+		System.out.println("Config at "+cfgFile.getAbsolutePath());
 		if(!cfgFile.exists())
 			genCfg();
 		if(!cfgFile.canRead())
@@ -73,5 +82,34 @@ public class MineConfigHandler{
 		}
 		System.out.println("Found "+servers.size()+" servers");
 		return servers;
+	}
+
+	public void setTempFile(String tmp) throws IOException{
+		tmpFile=new File(tmp);
+		if(!tmpFile.exists()) return;
+		BufferedReader in=new BufferedReader(new FileReader(tmpFile));
+		String ln=in.readLine();
+		while(ln!=null){
+			if(ln.startsWith("port="))
+				lastPort=Integer.parseInt(ln.substring(5));
+			else System.err.println("Temp file has invalid line: "+ln);
+			ln=in.readLine();
+		}
+		in.close();
+	}
+	
+	public void onServerStart() throws IOException{
+		if(tmpFile!=null){
+			PrintWriter out=new PrintWriter(tmpFile);
+			out.println("port="+port);
+			out.close();
+		}
+	}
+	
+	public void onServerStop(){
+		if(tmpFile!=null){
+			tmpFile.delete();
+			lastPort=-1;
+		}
 	}
 }

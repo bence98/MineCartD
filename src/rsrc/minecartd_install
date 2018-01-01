@@ -5,16 +5,21 @@ if [ $(id -u) != 0 ]; then
     exit 1
 fi
 
+# If minecartd service is installed, first stop it
+if [ -s /etc/systemd/system/minecartd.service ]; then
+	systemctl stop minecartd
+fi
+
 # Add user and working directory
 useradd -U -r -d /var/lib/minecartd -m minecartd
 
 # Download JAR
-wget -O /usr/lib/minecartd.jar http://csokicraft.agyklub.hu/downloads?file=minecartd_1.0.jar
+wget -O /usr/lib/minecartd.jar http://csokicraft.agyklub.hu/downloads?file=minecartd_1.1.jar
 
 # Add runscript
 cat > /usr/bin/minecartd <<'EOF'
 #!/bin/sh
-java -jar /usr/lib/minecartd.jar "$@"
+java -jar /usr/lib/minecartd.jar -t ~/minecartd.tmp "$@"
 EOF
 chmod 655 /usr/bin/minecartd
 

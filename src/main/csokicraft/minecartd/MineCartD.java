@@ -6,6 +6,7 @@ import java.net.Socket;
 import csokicraft.minecartd.manager.MineManagerHost;
 
 public class MineCartD{
+	public static final String APP_NAME_VER="MineCartD v1.1"; 
 
 	public static void main(String[] args) throws IOException{
 		if(args.length>0&&("--help".equals(args[0])||"-h".equals(args[0]))){
@@ -13,9 +14,9 @@ public class MineCartD{
 			System.exit(0);
 		}
 		
-		System.out.println("Loading MineCartD v1.0, by CsokiCraft");
+		System.out.println("Loading "+APP_NAME_VER+", by CsokiCraft");
 		boolean discover=true, stop=false;
-		String cfg=null;
+		String cfg=null, tmpf=null;
 		for(int i=0;i<args.length;i++){
 			if("--gen-cfg".equals(args[i])||"-C".equals(args[i]))
 				discover=false;
@@ -23,6 +24,8 @@ public class MineCartD{
 				cfg=args[++i];
 			if("--stop".equals(args[i])||"-S".equals(args[i]))
 				stop=true;
+			if("--tmpfile".equals(args[i])||"-t".equals(args[i]))
+				tmpf=args[++i];
 		}
 		
 		MineConfigHandler cfgMan;
@@ -30,9 +33,13 @@ public class MineCartD{
 			cfgMan=new MineConfigHandler();
 		else
 			cfgMan=new MineConfigHandler(new File(cfg));
+		if(tmpf!=null)
+			cfgMan.setTempFile(tmpf);
 		
 		if(stop){
-			Socket sock=new Socket("localhost", cfgMan.port);
+			int port=cfgMan.lastPort;
+			if(port==-1) port=cfgMan.port;
+			Socket sock=new Socket("localhost", port);
 			PrintWriter out=new PrintWriter(sock.getOutputStream());
 			out.println("STOP");
 			out.flush();
@@ -41,6 +48,7 @@ public class MineCartD{
 			MineManagerHost host=new MineManagerHost(cfgMan);
 			while(host.isAlive())
 				Thread.yield();
+			cfgMan.onServerStop();
 		}
 	}
 
