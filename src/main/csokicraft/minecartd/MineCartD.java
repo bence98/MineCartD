@@ -16,7 +16,7 @@ public class MineCartD{
 		
 		System.out.println("Loading "+APP_NAME_VER+", by CsokiCraft");
 		boolean discover=true, stop=false;
-		String cfg=null, tmpf=null;
+		String cfg=null, tmpf=MineConfigHandler.DEFAULT_TMP;
 		for(int i=0;i<args.length;i++){
 			if("--gen-cfg".equals(args[i])||"-C".equals(args[i]))
 				discover=false;
@@ -26,6 +26,8 @@ public class MineCartD{
 				stop=true;
 			if("--tmpfile".equals(args[i])||"-t".equals(args[i]))
 				tmpf=args[++i];
+			if("--no-tmpfile".equals(args[i])||"-T".equals(args[i]))
+				tmpf=null;
 		}
 		
 		MineConfigHandler cfgMan;
@@ -33,8 +35,7 @@ public class MineCartD{
 			cfgMan=new MineConfigHandler();
 		else
 			cfgMan=new MineConfigHandler(new File(cfg));
-		if(tmpf!=null)
-			cfgMan.setTempFile(tmpf);
+		cfgMan.setTempFile(tmpf);
 		
 		if(stop){
 			int port=cfgMan.lastPort;

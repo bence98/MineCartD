@@ -7,7 +7,8 @@ import csokicraft.minecartd.server.MineCraftServer;
 
 public class MineConfigHandler{
 	public static final String  DEFAULT_CFG="/etc/minecartd.conf",
-								DEFAULT_DIR="/var/lib/minecartd/servers";
+								DEFAULT_DIR="/var/lib/minecartd/servers",
+								DEFAULT_TMP="/tmp/minecartd.tmp";
 	public static final int DEFAULT_PORT=40960;
 	
 	/** Config file */
@@ -85,7 +86,14 @@ public class MineConfigHandler{
 	}
 
 	public void setTempFile(String tmp) throws IOException{
+		if(tmp==null){
+			tmpFile=null;
+			return;
+		}
+		
 		tmpFile=new File(tmp);
+		
+		//read tempfile
 		if(!tmpFile.exists()) return;
 		BufferedReader in=new BufferedReader(new FileReader(tmpFile));
 		String ln=in.readLine();
