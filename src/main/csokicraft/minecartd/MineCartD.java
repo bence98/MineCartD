@@ -42,6 +42,8 @@ public class MineCartD{
 			if(port==-1) port=cfgMan.port;
 			Socket sock=new Socket("localhost", port);
 			PrintWriter out=new PrintWriter(sock.getOutputStream());
+			if(cfgMan.lastPass!=null)
+				out.println(cfgMan.lastPass);
 			out.println("STOP");
 			out.flush();
 			sock.close();

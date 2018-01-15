@@ -24,6 +24,8 @@ public class MineManagerWorker extends Thread{
 			PrintWriter out=new PrintWriter(sock.getOutputStream());
 			out.println(MineCartD.APP_NAME_VER+" Command Interface. Type 'help' for a list of commands");
 			out.flush();
+			if(host.password!=null)
+				checkPass(in, out);
 			String cmd=in.readLine();
 			while(cmd!=null){
 				host.process(cmd, out);
@@ -36,5 +38,18 @@ public class MineManagerWorker extends Thread{
 		}
 		host.removeWorker(this);
 		//worker state: deleted
+	}
+
+	private void checkPass(BufferedReader in, PrintWriter out) throws IOException{
+		String ln;
+		do{
+			out.print("Password: ");
+			out.flush();
+			ln=in.readLine();
+		}while(ln!=null&&!ln.equals(host.password));
+		if(ln==null)
+			return;
+		out.println("Authenticated!");
+		out.flush();
 	}
 }

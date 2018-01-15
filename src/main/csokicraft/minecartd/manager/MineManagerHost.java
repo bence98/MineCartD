@@ -13,20 +13,22 @@ public class MineManagerHost{
 	protected ServerSocket srvSock;
 	/** Holds the workers. Always has exactly 1 worker in 'new' state */
 	protected List<MineManagerWorker> workers;
+	protected String password;
 	private boolean alive=true;
 	
-	public MineManagerHost(List<MineCraftServer> l, int port) throws IOException{
+	public MineManagerHost(List<MineCraftServer> l, int port, String pass) throws IOException{
 		servers=new HashMap<>();
 		for(MineCraftServer srv:l){
 			servers.put(srv.getName(), srv);
 		}
+		password=pass;
 		srvSock=new ServerSocket(port);
 		workers=new LinkedList<>();
 		newWorker();
 	}
 	
 	public MineManagerHost(MineConfigHandler cfg) throws IOException{
-		this(cfg.discoverServers(), cfg.port);
+		this(cfg.discoverServers(), cfg.port, cfg.password);
 		cfg.onServerStart();
 	}
 	
@@ -81,6 +83,8 @@ public class MineManagerHost{
 			return;
 		}
 		if("STOP".equals(cmd)){
+			out.println("Stopping MineCartD and servers, this may take a while...");
+			out.flush();
 			for(MineCraftServer server:servers.values()){
 				if(server.isAlive())
 					server.sendCmd("stop");

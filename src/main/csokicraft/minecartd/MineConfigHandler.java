@@ -18,12 +18,16 @@ public class MineConfigHandler{
 	public File serversDir;
 	/** Config entry: The port of the server */
 	public int port;
+	/** Config entry: A password for the server, or null if it does not exist */
+	public String password;
 	
 	/** Temp file */
 	protected File tmpFile;
 	
 	/** Tempfile entry: last known port of the server. '-1' means unknown */
 	protected int lastPort=-1;
+	/** Tempfile entry: last known password of the server */
+	public String lastPass;
 	
 	public MineConfigHandler() throws IOException{
 		this(new File(DEFAULT_CFG));
@@ -42,6 +46,7 @@ public class MineConfigHandler{
 		fout.println("# The directory for the servers");
 		fout.print("dir="); fout.println(DEFAULT_DIR);
 		fout.print("port="); fout.println(DEFAULT_PORT);
+		fout.println("#pass=Password!");
 		fout.close();
 	}
 
@@ -60,6 +65,8 @@ public class MineConfigHandler{
 				serversDir=new File(ln.substring(4));
 			else if(ln.startsWith("port="))
 				port=Integer.parseInt(ln.substring(5));
+			else if(ln.startsWith("pass="))
+				password=ln.substring(5);
 			else if(!ln.startsWith("#")&&!ln.trim().isEmpty())
 				System.err.println("Unrecognised option in config file ("+cfgFile.getAbsolutePath()+"): "+ln);
 			ln=fin.readLine();
@@ -100,6 +107,8 @@ public class MineConfigHandler{
 		while(ln!=null){
 			if(ln.startsWith("port="))
 				lastPort=Integer.parseInt(ln.substring(5));
+			else if(ln.startsWith("pass="))
+				lastPass=ln.substring(5);
 			else System.err.println("Temp file has invalid line: "+ln);
 			ln=in.readLine();
 		}
@@ -110,6 +119,8 @@ public class MineConfigHandler{
 		if(tmpFile!=null){
 			PrintWriter out=new PrintWriter(tmpFile);
 			out.println("port="+port);
+			if(password!=null)
+				out.println("pass="+password);
 			out.close();
 		}
 	}
@@ -118,6 +129,7 @@ public class MineConfigHandler{
 		if(tmpFile!=null){
 			tmpFile.delete();
 			lastPort=-1;
+			lastPass=null;
 		}
 	}
 }
