@@ -19,7 +19,7 @@ wget -O /usr/lib/minecartd.jar http://csokicraft.agyklub.hu/downloads?file=minec
 # Add runscript
 cat > /usr/bin/minecartd <<'EOF'
 #!/bin/sh
-java -jar /usr/lib/minecartd.jar -t ~/minecartd.tmp "$@"
+java -jar /usr/lib/minecartd.jar "$@"
 EOF
 chmod 655 /usr/bin/minecartd
 
@@ -27,7 +27,7 @@ chmod 655 /usr/bin/minecartd
 /usr/bin/minecartd -C
 
 # Add systemd service entry
-cat > /etc/systemd/system/minecartd.service <<EOF
+cat > /etc/systemd/system/minecartd.service <<'EOF'
 [Unit]
 Description=MineCartD - A Linux daemon for managing Minecraft servers
 After=network.target
@@ -36,8 +36,8 @@ After=network.target
 Type=simple
 User=minecartd
 WorkingDirectory=/var/lib/minecartd
-ExecStart=/usr/bin/minecartd
-ExecStop=/usr/bin/minecartd -S
+ExecStart=/usr/bin/minecartd -t ~/minecartd.tmp
+ExecStop=/usr/bin/minecartd -t ~/minecartd.tmp -S
 Restart=no
 
 [Install]
@@ -48,8 +48,13 @@ EOF
 systemctl enable minecartd
 systemctl start minecartd
 
-cat > /usr/bin/minecartd_uninstall <<EOF
+cat > /usr/bin/minecartd_uninstall <<'EOF'
 #!/bin/sh
+if [ $(id -u) != 0 ]; then
+    echo "You must run this script as root!" >&2
+    exit 1
+fi
+
 systemctl stop minecartd
 systemctl disable minecartd
 
