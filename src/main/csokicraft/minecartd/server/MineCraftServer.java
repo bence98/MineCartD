@@ -3,6 +3,8 @@ package csokicraft.minecartd.server;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
+import csokicraft.minecartd.locale.Locales;
+
 public class MineCraftServer{
 	public static final String[] EXEC_NAMES=new String[]{"server.sh", "start.sh"};
 	
@@ -29,7 +31,7 @@ public class MineCraftServer{
 				}
 		}
 		if(exec==null)
-			System.err.println("Server '"+getName()+"' doesn't have a 'server.sh' script");
+			System.err.println(Locales.inst.getActive().getEntryFormatted("error.server.nostart", getName()));
 	}
 	
 	public void startProc() throws IOException{

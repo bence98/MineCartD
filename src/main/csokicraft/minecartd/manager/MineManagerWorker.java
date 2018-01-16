@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 
 import csokicraft.minecartd.MineCartD;
+import csokicraft.minecartd.locale.Locales;
 
 public class MineManagerWorker extends Thread{
 	protected MineManagerHost host;
@@ -22,7 +23,7 @@ public class MineManagerWorker extends Thread{
 			host.newWorker();
 			BufferedReader in=new BufferedReader(new InputStreamReader(sock.getInputStream()));
 			PrintWriter out=new PrintWriter(sock.getOutputStream());
-			out.println(MineCartD.APP_NAME_VER+" Command Interface. Type 'help' for a list of commands");
+			out.println(Locales.inst.getActive().getEntryFormatted("msg.ci.motd", MineCartD.APP_NAME_VER));
 			out.flush();
 			if(host.password!=null)
 				checkPass(in, out);
@@ -43,13 +44,13 @@ public class MineManagerWorker extends Thread{
 	private void checkPass(BufferedReader in, PrintWriter out) throws IOException{
 		String ln;
 		do{
-			out.print("Password: ");
+			out.print(Locales.inst.getActive().getEntry("prompt.ci.pass"));
 			out.flush();
 			ln=in.readLine();
 		}while(ln!=null&&!ln.equals(host.password));
 		if(ln==null)
 			return;
-		out.println("Authenticated!");
+		out.println(Locales.inst.getActive().getEntry("msg.ci.auth_ok"));
 		out.flush();
 	}
 }

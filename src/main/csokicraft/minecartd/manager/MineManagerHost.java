@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.*;
 
 import csokicraft.minecartd.MineConfigHandler;
+import csokicraft.minecartd.locale.Locales;
 import csokicraft.minecartd.server.MineCraftServer;
 
 public class MineManagerHost{
@@ -57,33 +58,33 @@ public class MineManagerHost{
 			}
 		}
 		
-		System.out.println("Command: {"+cmd+"} {"+srv+"} {"+par+"}");
+		System.out.println(Locales.inst.getActive().getEntryFormatted("msg.host.incmd", cmd, srv, par));
 		
 		if("help".equals(cmd)){
-			out.println("Available commands:");
-			out.println(" help");
-			out.println(" list");
-			out.println(" STOP");
-			out.println(" start <server>");
-			out.println(" kill <server>");
-			out.println(" cmd <server> <command>");
-			out.println(" log <server> [maxlines]");
+			out.println(Locales.inst.getActive().getEntry("msg.ci.ack.help"));
+			out.println(Locales.inst.getActive().getEntry("msg.ci.help.1"));
+			out.println(Locales.inst.getActive().getEntry("msg.ci.help.2"));
+			out.println(Locales.inst.getActive().getEntry("msg.ci.help.3"));
+			out.println(Locales.inst.getActive().getEntry("msg.ci.help.4"));
+			out.println(Locales.inst.getActive().getEntry("msg.ci.help.5"));
+			out.println(Locales.inst.getActive().getEntry("msg.ci.help.6"));
+			out.println(Locales.inst.getActive().getEntry("msg.ci.help.7"));
 			return;
 		}
 		if("list".equals(cmd)){
-			out.println("Loaded servers:");
+			out.println(Locales.inst.getActive().getEntry("msg.ci.ack.list"));
 			for(String name:servers.keySet()){
 				out.print(' ');out.print(name);out.print('\t');
 				if(servers.get(name).isAlive())
-					out.println("*Online*");
+					out.println(Locales.inst.getActive().getEntry("msg.ci.list.on"));
 				else
-					out.println("*Offline*");
+					out.println(Locales.inst.getActive().getEntry("msg.ci.list.off"));
 			}
-			out.println("To start a server, use the 'start <name>' command");
+			out.println(Locales.inst.getActive().getEntry("msg.ci.tail.list"));
 			return;
 		}
 		if("STOP".equals(cmd)){
-			out.println("Stopping MineCartD and servers, this may take a while...");
+			out.println(Locales.inst.getActive().getEntry("msg.ci.ack.stop"));
 			out.flush();
 			for(MineCraftServer server:servers.values()){
 				if(server.isAlive())
@@ -99,27 +100,27 @@ public class MineManagerHost{
 			return;
 		}
 		MineCraftServer server=servers.get(srv);
-		if(server==null) out.println("No server named '"+srv+"'!");
+		if(server==null) out.println(Locales.inst.getActive().getEntryFormatted("error.ci.nosrv", srv));
 		else switch(cmd){
 		case "start":
 			if(server.isAlive()){
-				out.println(srv+" is already running!");
+				out.println(Locales.inst.getActive().getEntryFormatted("error.ci.srvon", srv));
 			}else{
 				server.startProc();
-				out.println("Started "+srv);
+				out.println(Locales.inst.getActive().getEntryFormatted("msg.ci.ack.start", srv));
 			}
 			return;
 		case "kill":
 			if(server.isAlive()){
 				server.killProc();
-				out.println("Killed "+srv);
+				out.println(Locales.inst.getActive().getEntryFormatted("msg.ci.ack.kill", srv));
 			}else{
-				out.println(srv+" is offline!");
+				out.println(Locales.inst.getActive().getEntryFormatted("error.ci.srvoff", srv));
 			}
 			return;
 		case "cmd":
 			server.sendCmd(par);
-			out.println("Sent '"+par+"' to "+srv);
+			out.println(Locales.inst.getActive().getEntryFormatted("msg.ci.ack.cmd", par, srv));
 			return;
 		case "log":
 			if(server.isAlive()){
@@ -128,7 +129,7 @@ public class MineManagerHost{
 				server.printLog(out, ln);
 				out.println();
 			}else{
-				out.println(srv+" is offline!");
+				out.println(Locales.inst.getActive().getEntryFormatted("error.ci.srvoff", srv));
 			}
 		}
 	}

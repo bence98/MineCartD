@@ -1,0 +1,40 @@
+# This is the Hungarian lang file for MineCartD
+
+msg.host.startup=%s indítása... CsokiCraft által
+msg.host.readcfg=Beállítófájl: %s
+msg.host.mkcfg=Beállítófájl létrehozása...
+msg.host.discover.dir=Szerverek könyvtára: %s
+msg.host.discover.count=Találtam %d szervert
+msg.host.incmd=Parancs: {%s} {%s} {%s}
+msg.host.setlocale=Nyelv átállítva: '%s'
+
+msg.ci.motd=%s Parancsablak (CI). Használja a 'help' parancsot a kiadható utasítások listájához
+prompt.ci.pass=Jelszó: 
+msg.ci.auth_ok=Sikeres belépés!
+msg.ci.ack.help=Kiadható utasítások:
+msg.ci.ack.list=Megtalált szerverek:
+msg.ci.list.on=*Online*
+msg.ci.list.off=*Offline*
+msg.ci.tail.list=Egy szerver elindításához használja a 'start <név>' parancsot
+msg.ci.ack.stop=MineCartD leállítása és szerverek bezárása, ez eltarthat egy darabig...
+msg.ci.ack.start=%s elindítva
+msg.ci.ack.kill=%s kilőve
+msg.ci.ack.cmd='%s' parancs végrehajtva %s szerveren
+msg.ci.help.1= help
+msg.ci.help.2= list
+msg.ci.help.3= STOP
+msg.ci.help.4= start <szerver>
+msg.ci.help.5= kill <szerver>
+msg.ci.help.6= cmd <szerver> <parancs>
+msg.ci.help.7= log <szerver> [maxsorok]
+
+error.locale.notfound=Nyelvi fájl '%s' nem található, helyette 'en' töltődik be
+error.server.nostart='%s' szerver mappájából hiányzik a 'server.sh' indítószkript!
+error.host.cfg.invalid=Ismeretlen sor a beállítófájlban (%s): %s
+error.host.cfg.read=%s nem olvasható!
+error.host.tmp.invalid=Az átmeneti fájlban (%s) hibás sor van: %s
+error.host.discover.dir=%s nem egy könyvtár!
+
+error.ci.nosrv=Nincs '%s' nevű szerver!
+error.ci.srvoff=%s nem fut!
+error.ci.srvon=%s már fut!

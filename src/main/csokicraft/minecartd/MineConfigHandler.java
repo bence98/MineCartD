@@ -3,6 +3,7 @@ package csokicraft.minecartd;
 import java.io.*;
 import java.util.*;
 
+import csokicraft.minecartd.locale.Locales;
 import csokicraft.minecartd.server.MineCraftServer;
 
 public class MineConfigHandler{
@@ -39,7 +40,7 @@ public class MineConfigHandler{
 	}
 
 	private void genCfg() throws IOException{
-		System.out.println("Creating config...");
+		System.out.println(Locales.inst.getActive().getEntryFormatted("msg.host.mkcfg", cfgFile.getAbsolutePath()));
 		PrintWriter fout=new PrintWriter(cfgFile);
 		fout.println("# This is the default config for MineCartD");
 		fout.println();
@@ -51,11 +52,11 @@ public class MineConfigHandler{
 	}
 
 	private void readCfg() throws IOException{
-		System.out.println("Config at "+cfgFile.getAbsolutePath());
+		System.out.println(Locales.inst.getActive().getEntryFormatted("msg.host.readcfg", cfgFile.getAbsolutePath()));
 		if(!cfgFile.exists())
 			genCfg();
 		if(!cfgFile.canRead())
-			throw new IllegalAccessError(cfgFile.getAbsolutePath()+" could not be read!");
+			throw new IllegalAccessError(Locales.inst.getActive().getEntryFormatted("error.host.cfg.read", cfgFile.getAbsolutePath()));
 		
 		port=DEFAULT_PORT;
 		BufferedReader fin=new BufferedReader(new FileReader(cfgFile));
@@ -68,27 +69,27 @@ public class MineConfigHandler{
 			else if(ln.startsWith("pass="))
 				password=ln.substring(5);
 			else if(!ln.startsWith("#")&&!ln.trim().isEmpty())
-				System.err.println("Unrecognised option in config file ("+cfgFile.getAbsolutePath()+"): "+ln);
+				System.err.println(Locales.inst.getActive().getEntryFormatted("error.host.cfg.invalid", cfgFile.getAbsolutePath(), ln));
 			ln=fin.readLine();
 		}
 		fin.close();
 		if(serversDir==null)
 			serversDir=new File(DEFAULT_DIR);
-		System.out.println("Servers' directory is "+serversDir.getAbsolutePath());
+		System.out.println(Locales.inst.getActive().getEntryFormatted("msg.host.discover.dir", serversDir.getAbsolutePath()));
 	}
 	
 	public List<MineCraftServer> discoverServers(){
 		if(!serversDir.exists())
 			serversDir.mkdirs();
 		if(!serversDir.isDirectory())
-			throw new IllegalArgumentException(serversDir.getAbsolutePath()+" is not a directory!");
+			throw new IllegalArgumentException(Locales.inst.getActive().getEntryFormatted("error.host.discover.dir", serversDir.getAbsolutePath()));
 		
 		List<MineCraftServer> servers=new LinkedList<>();
 		for(File srvDir:serversDir.listFiles()){
 			if(srvDir.isDirectory())
 				servers.add(new MineCraftServer(srvDir));
 		}
-		System.out.println("Found "+servers.size()+" servers");
+		System.out.println(Locales.inst.getActive().getEntryFormatted("msg.host.discover.count", servers.size()));
 		return servers;
 	}
 
@@ -109,7 +110,7 @@ public class MineConfigHandler{
 				lastPort=Integer.parseInt(ln.substring(5));
 			else if(ln.startsWith("pass="))
 				lastPass=ln.substring(5);
-			else System.err.println("Temp file has invalid line: "+ln);
+			else System.err.println(Locales.inst.getActive().getEntryFormatted("error.host.tmp.invalid", tmpFile.getAbsolutePath(), ln));
 			ln=in.readLine();
 		}
 		in.close();

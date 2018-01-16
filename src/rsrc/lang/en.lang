@@ -1,0 +1,40 @@
+# This is the default lang file for MineCartD
+
+msg.host.startup=Loading %s, written by CsokiCraft
+msg.host.readcfg=Config at %s
+msg.host.mkcfg=Creating config...
+msg.host.discover.dir=Servers' directory is %s
+msg.host.discover.count=Found %d servers
+msg.host.incmd=Command: {%s} {%s} {%s}
+msg.host.setlocale=Set locale to '%s'
+
+msg.ci.motd=%s Command Interface. Type 'help' for a list of commands
+prompt.ci.pass=Password: 
+msg.ci.auth_ok=Authenticated!
+msg.ci.ack.help=Available commands:
+msg.ci.ack.list=Loaded servers:
+msg.ci.list.on=*Online*
+msg.ci.list.off=*Offline*
+msg.ci.tail.list=To start a server, use the 'start <name>' command
+msg.ci.ack.stop=Stopping MineCartD and servers, this may take a while...
+msg.ci.ack.start=Started %s
+msg.ci.ack.kill=Killed %s
+msg.ci.ack.cmd=Sent '%s' to %s
+msg.ci.help.1= help
+msg.ci.help.2= list
+msg.ci.help.3= STOP
+msg.ci.help.4= start <server>
+msg.ci.help.5= kill <server>
+msg.ci.help.6= cmd <server> <command>
+msg.ci.help.7= log <server> [maxlines]
+
+error.locale.notfound=Locale '%s' not found, falling back to 'en'
+error.server.nostart=Server '%s' doesn't have a 'server.sh' script!
+error.host.cfg.invalid=Unrecognised option in config file (%s): %s
+error.host.cfg.read=%s could not be read!
+error.host.tmp.invalid=Temp file (%s) has invalid line: %s
+error.host.discover.dir=%s is not a directory!
+
+error.ci.nosrv=No server named '%s'!
+error.ci.srvoff=%s is offline!
+error.ci.srvon=%s is already running!

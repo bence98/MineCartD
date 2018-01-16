@@ -3,10 +3,11 @@ package csokicraft.minecartd;
 import java.io.*;
 import java.net.Socket;
 
+import csokicraft.minecartd.locale.Locales;
 import csokicraft.minecartd.manager.MineManagerHost;
 
 public class MineCartD{
-	public static final String APP_NAME_VER="MineCartD v1.1"; 
+	public static final String APP_NAME_VER="MineCartD v1.2"; 
 
 	public static void main(String[] args) throws IOException{
 		if(args.length>0&&("--help".equals(args[0])||"-h".equals(args[0]))){
@@ -14,7 +15,6 @@ public class MineCartD{
 			System.exit(0);
 		}
 		
-		System.out.println("Loading "+APP_NAME_VER+", by CsokiCraft");
 		boolean discover=true, stop=false;
 		String cfg=null, tmpf=MineConfigHandler.DEFAULT_TMP;
 		for(int i=0;i<args.length;i++){
@@ -28,7 +28,10 @@ public class MineCartD{
 				tmpf=args[++i];
 			if("--no-tmpfile".equals(args[i])||"-T".equals(args[i]))
 				tmpf=null;
+			if("--lang".equals(args[i])||"-l".equals(args[i]))
+				Locales.inst.setActive(args[++i]);
 		}
+		System.out.println(Locales.inst.getActive().getEntryFormatted("msg.host.startup", APP_NAME_VER));
 		
 		MineConfigHandler cfgMan;
 		if(cfg==null)
@@ -62,5 +65,9 @@ public class MineCartD{
 		System.out.println("Options:");
 		System.out.println(" --gen-cfg|-C : generate config and quit");
 		System.out.println(" --cfgfile|-f <file> : use this config file");
+		System.out.println(" --tmpfile|-t <file> : use this temp file");
+		System.out.println(" --no-tmpfile|-T : do not use a temp file");
+		System.out.println(" --stop|-S : send 'STOP' to a server with the same tempfile");
+		System.out.println(" --lang|-l <code> : use this language file");
 	}
 }
