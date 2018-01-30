@@ -33,9 +33,15 @@ public class Locales{
 		return locales.get(name);
 	}
 	
+	/** @return the active locale. If {@link #hasActive()} returns false, this will return {@link #EN}. */
 	public Locale getActive(){
-		if(active==null) active=EN;
+		if(!hasActive()) return EN;
 		return active;
+	}
+	
+	/** @return true if there's an active locale. If this function returns false, {@link #getActive()} will return {@link #EN}. */
+	public boolean hasActive(){
+		return active!=null;
 	}
 	
 	public void setActive(String to){

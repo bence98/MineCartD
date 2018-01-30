@@ -47,6 +47,9 @@ public class MineConfigHandler{
 		fout.println("# The directory for the servers");
 		fout.print("dir="); fout.println(DEFAULT_DIR);
 		fout.print("port="); fout.println(DEFAULT_PORT);
+		fout.println("# The language. The `-l` option overrides it. If not set, will fall back to 'en'");
+		fout.println("#lang=en");
+		fout.println("# The password for the Command Interface. This does not fully protect from illegal access, you have been warned!");
 		fout.println("#pass=Password!");
 		fout.close();
 	}
@@ -68,6 +71,8 @@ public class MineConfigHandler{
 				port=Integer.parseInt(ln.substring(5));
 			else if(ln.startsWith("pass="))
 				password=ln.substring(5);
+			else if(ln.startsWith("lang=")&&!Locales.inst.hasActive())
+				Locales.inst.setActive(ln.substring(5));
 			else if(!ln.startsWith("#")&&!ln.trim().isEmpty())
 				System.err.println(Locales.inst.getActive().getEntryFormatted("error.host.cfg.invalid", cfgFile.getAbsolutePath(), ln));
 			ln=fin.readLine();
