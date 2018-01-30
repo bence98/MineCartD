@@ -30,6 +30,8 @@ msg.ci.help.7= log <szerver> [maxsorok]
 
 error.locale.notfound=Nyelvi fájl '%s' nem található, helyette 'en' töltődik be
 error.server.nostart='%s' szerver mappájából hiányzik a 'server.sh' indítószkript!
+error.server.propfile.read='%s' szerver 'minecartd.properties' fájlja hibás!
+error.server.propfile.invalid='%s' szerver 'minecartd.properties' fájljában hibás sor van: %s
 error.host.cfg.invalid=Ismeretlen sor a beállítófájlban (%s): %s
 error.host.cfg.read=%s nem olvasható!
 error.host.tmp.invalid=Az átmeneti fájlban (%s) hibás sor van: %s

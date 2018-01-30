@@ -21,6 +21,7 @@ public class MineManagerHost{
 		servers=new HashMap<>();
 		for(MineCraftServer srv:l){
 			servers.put(srv.getName(), srv);
+			srv.onHostLoaded();
 		}
 		password=pass;
 		srvSock=new ServerSocket(port);
