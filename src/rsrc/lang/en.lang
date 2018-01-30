@@ -29,9 +29,13 @@ msg.ci.help.6= cmd <server> <command>
 msg.ci.help.7= log <server> [maxlines]
 
 error.locale.notfound=Locale '%s' not found, falling back to 'en'
+
 error.server.nostart=Server '%s' doesn't have a 'server.sh' script!
 error.server.propfile.read=Server '%s' has an invalid 'minecartd.properties' file!
 error.server.propfile.invalid=Server '%s' has an invalid line in 'minecartd.properties' file: %s
+error.server.start=Could not start server '%s'!
+error.server.cmd=Error while connecting to command-line of server '%s'!
+
 error.host.cfg.invalid=Unrecognised option in config file (%s): %s
 error.host.cfg.read=%s could not be read!
 error.host.tmp.invalid=Temp file (%s) has invalid line: %s

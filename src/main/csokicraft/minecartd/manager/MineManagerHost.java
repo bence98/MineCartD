@@ -34,7 +34,7 @@ public class MineManagerHost{
 		cfg.onServerStart();
 	}
 	
-	public synchronized void newWorker() throws IOException{
+	public synchronized void newWorker(){
 		MineManagerWorker worker=new MineManagerWorker(this);
 		worker.start();
 		workers.add(worker);
@@ -89,7 +89,7 @@ public class MineManagerHost{
 			out.flush();
 			for(MineCraftServer server:servers.values()){
 				if(server.isAlive())
-					server.sendCmd("stop");
+					server.sendCmd("stop", out);
 			}
 			try{
 				Thread.sleep(1000);
@@ -107,8 +107,8 @@ public class MineManagerHost{
 			if(server.isAlive()){
 				out.println(Locales.inst.getActive().getEntryFormatted("error.ci.srvon", srv));
 			}else{
-				server.startProc();
-				out.println(Locales.inst.getActive().getEntryFormatted("msg.ci.ack.start", srv));
+				if(server.startProc(out))
+					out.println(Locales.inst.getActive().getEntryFormatted("msg.ci.ack.start", srv));
 			}
 			return;
 		case "kill":
@@ -120,8 +120,8 @@ public class MineManagerHost{
 			}
 			return;
 		case "cmd":
-			server.sendCmd(par);
-			out.println(Locales.inst.getActive().getEntryFormatted("msg.ci.ack.cmd", par, srv));
+			if(server.sendCmd(par, out))
+				out.println(Locales.inst.getActive().getEntryFormatted("msg.ci.ack.cmd", par, srv));
 			return;
 		case "log":
 			if(server.isAlive()){

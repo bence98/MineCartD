@@ -58,12 +58,23 @@ public class MineCraftServer{
 		fin.close();
 	}
 
-	public void startProc() throws IOException{
+	private void startProc() throws IOException{
 		ProcessBuilder builder=new ProcessBuilder().redirectErrorStream(true);
 		builder.directory(dir).command(exec.getAbsolutePath());
 		proc=builder.start();
 		lnBuf=new OutputLineBuffer(proc.getInputStream());
 		lnBuf.start();
+	}
+	
+	public boolean startProc(PrintWriter err){
+		try{
+			startProc();
+			return true;
+		}catch (Exception e){
+			err.println(Locales.inst.getActive().getEntryFormatted("error.server.start", getName()));
+			e.printStackTrace(err);
+			return false;
+		}
 	}
 	
 	public void killProc(){
@@ -75,11 +86,22 @@ public class MineCraftServer{
 		return proc!=null&&proc.isAlive();
 	}
 	
-	public void sendCmd(String str) throws IOException{
+	private void sendCmd(String str) throws IOException{
 		OutputStream os=proc.getOutputStream();
 		os.write(str.getBytes());
 		os.write(System.lineSeparator().getBytes());
 		os.flush();
+	}
+	
+	public boolean sendCmd(String str, PrintWriter err){
+		try{
+			sendCmd(str);
+			return true;
+		}catch(Exception e){
+			err.println(Locales.inst.getActive().getEntryFormatted("error.server.cmd", getName()));
+			e.printStackTrace(err);
+			return false;
+		}
 	}
 
 	public String getName(){
@@ -100,11 +122,7 @@ public class MineCraftServer{
 	}
 
 	public void onHostLoaded(){
-		try{
 		if(autostart)
-			startProc();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+			startProc(new PrintWriter(System.err));
 	}
 }
