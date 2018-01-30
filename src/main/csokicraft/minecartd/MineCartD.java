@@ -70,4 +70,12 @@ public class MineCartD{
 		System.out.println(" --stop|-S : send 'STOP' to a server with the same tempfile");
 		System.out.println(" --lang|-l <code> : use this language file");
 	}
+
+	public static boolean parseBool(String str) throws IllegalArgumentException{
+		if("1".equals(str)||"true".equals(str)||"enable".equals(str)||"on".equals(str))
+			return true;
+		if("0".equals(str)||"false".equals(str)||"disable".equals(str)||"off".equals(str))
+			return false;
+		throw new IllegalArgumentException(str);
+	}
 }

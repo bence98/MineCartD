@@ -3,6 +3,7 @@ package csokicraft.minecartd.server;
 import java.io.*;
 import java.util.concurrent.TimeUnit;
 
+import csokicraft.minecartd.MineCartD;
 import csokicraft.minecartd.locale.Locales;
 
 public class MineCraftServer{
@@ -47,10 +48,13 @@ public class MineCraftServer{
 		BufferedReader fin=new BufferedReader(new FileReader(f));
 		String ln=fin.readLine();
 		while(ln!=null){
-			if(ln.equals("autostart=1")||ln.equals("autostart=on")||ln.equals("autostart=true")||ln.equals("autostart=enable"))
-				autostart=true;
-			else if(ln.equals("autostart=0")||ln.equals("autostart=off")||ln.equals("autostart=false")||ln.equals("autostart=disable"))
-				autostart=false;
+			if(ln.startsWith("#")) ;
+			else if(ln.startsWith("autostart="))
+				try{
+					autostart=MineCartD.parseBool(ln.substring(10));
+				}catch(IllegalArgumentException e){
+					System.err.println(Locales.inst.getActive().getEntryFormatted("error.server.propfile.invalid", getName(), ln));
+				}
 			else
 				System.err.println(Locales.inst.getActive().getEntryFormatted("error.server.propfile.invalid", getName(), ln));
 			ln=fin.readLine();
@@ -78,6 +82,7 @@ public class MineCraftServer{
 	}
 	
 	public void killProc(){
+		System.out.println(Locales.inst.getActive().getEntryFormatted("msg.host.srvkilled", getName()));
 		proc.destroyForcibly();
 		lnBuf.close();
 	}

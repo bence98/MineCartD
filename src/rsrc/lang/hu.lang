@@ -7,6 +7,7 @@ msg.host.discover.dir=Szerverek könyvtára: %s
 msg.host.discover.count=Találtam %d szervert
 msg.host.incmd=Parancs: {%s} {%s} {%s}
 msg.host.setlocale=Nyelv átállítva: '%s'
+msg.host.srvkilled='%s' folyamat kilőve
 
 msg.ci.motd=%s Parancsablak (CI). Használja a 'help' parancsot a kiadható utasítások listájához
 prompt.ci.pass=Jelszó: 

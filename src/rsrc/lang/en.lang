@@ -7,6 +7,7 @@ msg.host.discover.dir=Servers' directory is %s
 msg.host.discover.count=Found %d servers
 msg.host.incmd=Command: {%s} {%s} {%s}
 msg.host.setlocale=Set locale to '%s'
+msg.host.srvkilled='%s' process was killed
 
 msg.ci.motd=%s Command Interface. Type 'help' for a list of commands
 prompt.ci.pass=Password: 
