@@ -14,7 +14,7 @@ public class Locales{
 	protected Locales(){
 		locales=new HashMap<>();
 		try{
-			EN=Locale.from(ClassLoader.getSystemResourceAsStream("lang/en.lang"));
+			EN=Locale.from(getClass().getResourceAsStream("/lang/en.lang"));
 		}catch (IOException e){
 			throw new RuntimeException("Couldn't load locales!", e);
 		}
@@ -22,7 +22,7 @@ public class Locales{
 	
 	public Locale getLocale(String name){
 		if(!locales.containsKey(name)){
-			InputStream in=ClassLoader.getSystemResourceAsStream("lang/"+name+".lang");
+			InputStream in=getClass().getResourceAsStream("/lang/"+name+".lang");
 			try{
 				locales.put(name, Locale.from(in));
 			}catch(IOException|NullPointerException e){
