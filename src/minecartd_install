@@ -14,7 +14,7 @@ fi
 useradd -U -r -d /var/lib/minecartd -m minecartd
 
 # Download JAR
-wget -O /usr/lib/minecartd.jar http://csokicraft.agyklub.hu/downloads?file=minecartd_1.1.jar
+wget -O /usr/lib/minecartd.jar https://github.com/bence98/MineCartD/releases/download/v1.2/minecartd_1.2.jar
 
 # Add runscript
 cat > /usr/bin/minecartd <<'EOF'
